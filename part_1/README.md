@@ -95,14 +95,14 @@ FROM devopsdockeruh/simple-web-service:alpine
 
 CMD server
 ```
-### Command
+### Commands
 ```
 $ docker build . -t web-server
 $ docker run web-server
 ```
 
 ## Exercise 1.9: VOLUMES
-### Command
+### Commands
 ```
 $ touch text.log
 $ docker run -v "$(pwd)/text.log:/usr/src/app/text.log" devopsdockeruh/simple-web-service
@@ -112,9 +112,121 @@ $ docker run -v "$(pwd)/text.log:/usr/src/app/text.log" devopsdockeruh/simple-we
 Secret message is: 'You can find the source code here: https://github.com/docker-hy'
 ```
 
-## Exercise 1.10
+## Exercise 1.10: PORTS OPEN
 ```
 docker run -p 8080:8080 devopsdockeruh/simple-web-service ser server
 ```
 ![exercise_1 10](https://user-images.githubusercontent.com/88223950/224533649-13bb4f9b-d77d-4c40-afa0-0848595b1e8a.png)
 
+## Exercise 1.11: SPRING
+### Dockerfile
+```
+FROM openjdk:8
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN ./mvnw package
+
+CMD ["java", "-jar", "./target/docker-example-1.1.3.jar"]
+
+EXPOSE 8080
+```
+### Output
+![exercise_1 11](https://user-images.githubusercontent.com/88223950/224543841-ffb867fd-8a5f-4b5b-8c52-f36d65fe7a24.png)
+
+## Exercise 1.12: HELLO, FRONTEND!
+### Dockerfile
+```
+FROM node:14-alpine
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm install && npm run build && npm install -g serve
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+EXPOSE 5000
+```
+### Commands
+```
+$ docker build . -t example-frontend
+$ docker run -p 5000:5000 example-frontend
+```
+
+## Exercise 1.13: HELLO, BACKEND!
+### Dockerfile
+```
+FROM golang:1.16
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN go build
+
+ENV PORT 8080
+ENV REQUEST_ORIGIN https://example.com
+
+CMD ["./server"]
+
+EXPOSE 8080
+```
+### Commands
+```
+$ docker build . -t example-backend
+$ docker run -p 8080:8080 example-backend
+```
+![exercise_1 13](https://user-images.githubusercontent.com/88223950/224546461-9fd36fa3-aeb2-45d9-8fac-cdb14db226f8.png)
+
+
+## Exercise 1.14: ENVIRONMENT
+### Dockerfile (example-frontend)
+```
+FROM node:14-alpine
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV REACT_APP_BACKEND_URL http://localhost:8080/
+
+RUN npm install && npm run build && npm install -g serve
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+EXPOSE 5000
+```
+### Dockerfile (example-backend)
+```
+FROM golang:1.16
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN go build
+
+ENV PORT 8080
+ENV REQUEST_ORIGIN http://localhost:5000
+
+CMD ["./server"]
+
+EXPOSE 8080
+```
+### Commands
+```
+$ docker build . -t example-frontend
+$ docker build . -t example-backend
+$ docker run -p 5000:5000 example-frontend
+$ docker run -p 8080:8080 example-backend
+```
+![exercise_1 14](https://user-images.githubusercontent.com/88223950/224548209-29e6ede2-7490-4f9b-81a1-a77419b5abae.png)
+
+## Exercise 1.15: HOMEWORK
+
+
+## Exercise 1.16: CLOUD DEPLOYMENT
