@@ -11,10 +11,10 @@
   - [x] Exercise 1.8
   - [x] Exercise 1.9
   - [x] Exercise 1.10
-  - [ ] Exercise 1.11
-  - [ ] Exercise 1.12
-  - [ ] Exercise 1.13
-  - [ ] Exercise 1.14
+  - [x] Exercise 1.11
+  - [x] Exercise 1.12
+  - [x] Exercise 1.13
+  - [x] Exercise 1.14
   - [ ] Exercise 1.15
   - [ ] Exercise 1.16
 - [ ] Part 2
